@@ -98,9 +98,9 @@
 <p>When R loads a package, it builds a locked namespace. Internal package functions call each other inside that namespace, and the namespace acts as a protective bubble.</p>
 <p>That means:</p>
 <ul>
-<li>a broken internal function like <code>a_freq_j()</code> is only visible inside the package namespace</li>
-<li>a package function like <code>tt_to_tlgrtf()</code> resolves internal calls from that same locked namespace</li>
-<li>sourcing a fixed <code>a_freq_j()</code> into the global environment does not update the package’s internal pointer</li>
+<li>a broken internal function like <code>broken_fun()</code> is only visible inside the package namespace</li>
+<li>a package function like <code>caller_fun()</code> resolves internal calls from that same locked namespace</li>
+<li>sourcing a fixed <code>broken_fun()</code> into the global environment does not update the package’s internal pointer</li>
 </ul>
 <p>In practice, this forces a painful current workflow:</p>
 <ul>
