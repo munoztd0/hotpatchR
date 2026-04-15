@@ -1,0 +1,17 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://example.com/hotpatchR/404.html</loc></url>
+<url><loc>https://example.com/hotpatchR/CLAUDE.html</loc></url>
+<url><loc>https://example.com/hotpatchR/LICENSE-text.html</loc></url>
+<url><loc>https://example.com/hotpatchR/LICENSE.html</loc></url>
+<url><loc>https://example.com/hotpatchR/articles/hotpatchR-intro.html</loc></url>
+<url><loc>https://example.com/hotpatchR/articles/index.html</loc></url>
+<url><loc>https://example.com/hotpatchR/authors.html</loc></url>
+<url><loc>https://example.com/hotpatchR/index.html</loc></url>
+<url><loc>https://example.com/hotpatchR/news/index.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/apply_hotfix_file.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/index.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/inject_patch.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/test_patched_dir.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/undo_patch.html</loc></url>
+</urlset>
+
