@@ -1,15 +1,28 @@
-# hotpatchR
+# hotpatchR <a href='https://github.com/munoztd0/hotpatchR'><img src="inst/hex/hotpatchR-hex.png" align="right" width="200"/></a>
 
-<p align="left"><a href="inst/hex/hotpatchR-hex.svg"><img src="inst/hex/hotpatchR-hex.svg" alt="hotpatchR hex logo" width="120"/></a></p>
-
-
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
+<!-- start badges -->
+[[![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml)
-<!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/munoztd0/hotpatchR/graph/badge.svg)](https://app.codecov.io/gh/munoztd0/hotpatchR)
 <!-- badges: end -->
+
+![GitHub forks](https://img.shields.io/github/forks/munoztd0/hotpatchR?style=social)
+![GitHub repo stars](https://img.shields.io/github/stars/munoztd0/hotpatchR?style=social)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/munoztd0/hotpatchR)
+![GitHub contributors](https://img.shields.io/github/contributors/munoztd0/hotpatchR)
+![GitHub last commit](https://img.shields.io/github/last-commit/munoztd0/hotpatchR)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/munoztd0/hotpatchR)
+![GitHub repo size](https://img.shields.io/github/repo-size/munoztd0/hotpatchR)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Current Version](https://img.shields.io/github/r-package/v/munoztd0/hotpatchR/main?color=purple&label=package%20version)](https://github.com/munoztd0/hotpatchR/tree/main)
+[![Open Issues](https://img.shields.io/github/issues-raw/munoztd0/hotpatchR?color=red&label=open%20issues)](https://github.com/munoztd0/hotpatchR/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+<!-- end badges -->
+
+
+
+<!-- badges: start -->
+
 
 `hotpatchR` is a runtime hotfix utility for locked R package namespaces.
 It is built for legacy container workflows where a package version is sealed in place
