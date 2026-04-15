@@ -47,9 +47,9 @@ as a protective bubble.
 
 That means:
 
-- a broken internal function like `a_freq_j()` is only visible inside the package namespace
-- a package function like `tt_to_tlgrtf()` resolves internal calls from that same locked namespace
-- sourcing a fixed `a_freq_j()` into the global environment does not update the package's internal pointer
+- a broken internal function like `broken_fun()` is only visible inside the package namespace
+- a package function like `caller_fun()` resolves internal calls from that same locked namespace
+- sourcing a fixed `broken_fun()` into the global environment does not update the package's internal pointer
 
 In practice, this forces a painful current workflow:
 
