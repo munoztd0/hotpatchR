@@ -78,21 +78,6 @@
 <!-- badges: start -->
 <p><code>hotpatchR</code> is a runtime hotfix utility for locked R package namespaces. It is built for legacy container workflows where a package version is sealed in place and cannot be rebuilt or redeployed.</p>
 <div class="section level2">
-<h2 id="continuous-integration">Continuous integration<a class="anchor" aria-label="anchor" href="#continuous-integration"></a>
-</h2>
-<p>This repository includes GitHub Actions workflows in <code>.github/workflows</code>:</p>
-<ul>
-<li>
-<code>r-cmd-check.yaml</code> — runs <code>R CMD check</code> on push and pull requests</li>
-<li>
-<code>pkgdown.yaml</code> — builds the pkgdown site and uploads generated docs as an artifact</li>
-</ul>
-<p>These workflows are designed to catch package issues early and keep documentation up to date.</p>
-<blockquote>
-<p>Note: <code>gh::gh_whoami()</code> is a local GitHub authentication check. It fails when your machine does not have a valid GitHub PAT or <code>gh</code> login configured. The workflows in <code>.github/workflows/</code> run on GitHub Actions and use the platform token automatically.</p>
-</blockquote>
-</div>
-<div class="section level2">
 <h2 id="the-core-problem">The core problem<a class="anchor" aria-label="anchor" href="#the-core-problem"></a>
 </h2>
 <p>When R loads a package, it builds a locked namespace. Internal package functions call each other inside that namespace, and the namespace acts as a protective bubble.</p>
