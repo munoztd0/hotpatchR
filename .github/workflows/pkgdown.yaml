@@ -16,9 +16,8 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - name: Install dependencies
         run: |
-          Rscript -e 'install.packages(c("remotes"), repos = "https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_deps(dependencies = TRUE)'
-          Rscript -e 'if (!requireNamespace("pkgdown", quietly = TRUE)) install.packages("pkgdown", repos = "https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("remotes", "pkgdown"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never")'
       - name: Build pkgdown site
         run: Rscript -e 'pkgdown::build_site()'
       - name: Upload docs artifact

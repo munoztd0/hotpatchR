@@ -1,6 +1,6 @@
 # hotpatchR
 
-[![hotpatchR hex logo](inst/hex/hotpatchR-hex.png)](inst/hex/hotpatchR-hex.png)
+<p align="left"><a href="inst/hex/hotpatchR-hex.svg"><img src="inst/hex/hotpatchR-hex.svg" alt="hotpatchR hex logo" width="120"/></a></p>
 
 [![R-CMD check](https://github.com/munoztd0/hotpatchR/actions/workflows/r-cmd-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/r-cmd-check.yaml)
 [![pkgdown](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml)
