@@ -28,17 +28,6 @@
 It is built for legacy container workflows where a package version is sealed in place
 and cannot be rebuilt or redeployed.
 
-## Continuous integration
-
-This repository includes GitHub Actions workflows in `.github/workflows`:
-
-- `r-cmd-check.yaml` — runs `R CMD check` on push and pull requests
-- `pkgdown.yaml` — builds the pkgdown site and uploads generated docs as an artifact
-
-These workflows are designed to catch package issues early and keep documentation up to date.
-
-> Note: `gh::gh_whoami()` is a local GitHub authentication check. It fails when your machine does not have a valid GitHub PAT or `gh` login configured. The workflows in `.github/workflows/` run on GitHub Actions and use the platform token automatically.
-
 ## The core problem
 
 When R loads a package, it builds a locked namespace.
