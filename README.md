@@ -18,6 +18,8 @@ This repository includes GitHub Actions workflows in `.github/workflows`:
 
 These workflows are designed to catch package issues early and keep documentation up to date.
 
+> Note: `gh::gh_whoami()` is a local GitHub authentication check. It fails when your machine does not have a valid GitHub PAT or `gh` login configured. The workflows in `.github/workflows/` run on GitHub Actions and use the platform token automatically.
+
 ## The core problem
 
 When R loads a package, it builds a locked namespace.
