@@ -2,8 +2,14 @@
 
 <p align="left"><a href="inst/hex/hotpatchR-hex.svg"><img src="inst/hex/hotpatchR-hex.svg" alt="hotpatchR hex logo" width="120"/></a></p>
 
-[![R-CMD check](https://github.com/munoztd0/hotpatchR/actions/workflows/r-cmd-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/r-cmd-check.yaml)
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 [![pkgdown](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml)
+<!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/munoztd0/hotpatchR/graph/badge.svg)](https://app.codecov.io/gh/munoztd0/hotpatchR)
+<!-- badges: end -->
 
 `hotpatchR` is a runtime hotfix utility for locked R package namespaces.
 It is built for legacy container workflows where a package version is sealed in place
