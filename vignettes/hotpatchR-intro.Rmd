@@ -1,0 +1,118 @@
+---
+title: "hotpatchR Overview"
+author: "hotpatchR Team"
+date: "2026-04-15"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hotpatchR Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(hotpatchR)
+```
+
+# Introduction
+
+This vignette explains the `hotpatchR` design and why runtime namespace patching is the right tool for legacy hotfix workflows.
+
+## The legacy package lockdown problem
+
+A loaded R package lives in a locked namespace. That means internal functions are resolved from inside the package bubble.
+When one internal function calls another, R does not look in the global environment.
+
+So if you fix `a_freq_j()` in the global environment, `tt_to_tlgrtf()` inside the package still calls the original broken version.
+
+This is the namespace trap that makes legacy hotfixing so difficult.
+
+## Why the global workaround fails
+
+The usual workaround is:
+
+- identify the broken function
+- find all parent callers in the package
+- copy the broken function and every dependent caller into a hotfix script
+- source the script into the global environment
+- run tests to confirm the patched path
+
+This is painful because a bug in one internal function can require copying many internal callers, even when only one implementation actually needs to change.
+
+## hotpatchR philosophy
+
+Instead of pulling functions out into the global environment, `hotpatchR` performs surgical edits inside the package namespace.
+That means:
+
+- fix only the broken function
+- internal callers automatically resolve to the updated implementation
+- the package remains loaded and otherwise unchanged
+
+## Basic workflow
+
+```{r example}
+# Simulate a locked package environment.
+pkg_env <- new.env()
+pkg_env$broken_child <- function() "I am broken"
+pkg_env$parent_caller <- function() pkg_env$broken_child()
+lockEnvironment(pkg_env)
+lockBinding("broken_child", pkg_env)
+lockBinding("parent_caller", pkg_env)
+
+# Apply the patch.
+fixed_child <- function() "I am FIXED"
+inject_patch(pkg_env, list(broken_child = fixed_child))
+
+pkg_env$parent_caller()
+```
+
+If `pkg_env` were a real package namespace, the same internal caller would now use the patched `broken_child()`.
+
+## How inject_patch works
+
+`inject_patch()`:
+
+1. identifies the target namespace or environment
+2. unlocks the binding for the named object
+3. assigns the replacement function into that environment
+4. re-locks the binding
+
+Because the replacement function's parent environment is set to the target namespace, it can still call other internal objects from the same package.
+
+## Rolling back a patch
+
+If you need to restore the original binding, `undo_patch()` reverses the previous change.
+
+```{r undo-example}
+undo_patch(pkg_env, "broken_child")
+pkg_env$parent_caller()
+```
+
+## Hotfix scripts
+
+`apply_hotfix_file()` is a convenience wrapper for scripting hotfix application. A compatible hotfix script should define:
+
+- `pkg` (optional, if not passed explicitly)
+- `patch_list`, a named list of replacement functions
+
+Example hotfix file:
+
+```r
+pkg <- "junco"
+patch_list <- list(
+  a_freq_j = function(...) {
+    # fixed implementation
+  }
+)
+```
+
+Then apply it with:
+
+```r
+apply_hotfix_file("dev/junco_hotfix_v0-1-1.R")
+```
+
+## Next steps
+
+The current package is focused on the core runtime patching path.
+Future enhancements may include patch comparison, dependency scanning, and CI-friendly test wrappers that explicitly preserve the patched namespace during test execution.

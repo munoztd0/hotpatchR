@@ -1,0 +1,14 @@
+url: https://example.com/hotpatchR
+template:
+  params:
+    bootswatch: flatly
+navbar:
+  structure:
+    left: [home, reference, articles]
+    right: [github]
+  components:
+    - text: hotpatchR
+      href: index.html
+pkgdown:
+  as_is:
+    - README.md

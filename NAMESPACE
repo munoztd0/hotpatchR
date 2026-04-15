@@ -1,0 +1,4 @@
+export(inject_patch)
+export(test_patched_dir)
+export(undo_patch)
+export(apply_hotfix_file)

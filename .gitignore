@@ -1,0 +1,28 @@
+# Operating system
+.DS_Store
+
+# RStudio and R
+.Rhistory
+.Rapp.history
+.RData
+.Ruserdata
+.Rproj.user/
+.Rproj
+.Rprofile
+.Renviron
+.Rbuildignore
+.gitattributes
+
+# Package build and checks
+*.tar.gz
+*.Rcheck/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+claude.md

@@ -1,0 +1,17 @@
+Package: hotpatchR
+Type: Package
+Title: Runtime Namespace Patching Utilities for R Packages
+Version: 0.1.0
+Authors@R: person("David", "Munoz Tord", email = "david.munoz.tord@mailbox.org", role = c("aut", "cre"))
+Description: Dynamically inject function patches into locked package namespaces and run tests against the patched in-memory package.
+License: LGPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Imports:
+    testthat (>= 3.0.0)
+Suggests:
+    knitr,
+    rmarkdown,
+    pkgdown
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
