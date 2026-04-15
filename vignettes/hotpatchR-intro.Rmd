@@ -1,6 +1,6 @@
 ---
 title: "hotpatchR Overview"
-author: "hotpatchR Team"
+author: "David Munoz Tord"
 date: "2026-04-15"
 output: rmarkdown::html_vignette
 vignette: >
