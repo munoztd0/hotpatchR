@@ -197,6 +197,6 @@ apply_hotfix_file <- function(file, pkg = NULL) {
   patch_list <- get("patch_list", envir = env)
   inject_patch(pkg = pkg, patch_list = patch_list)
   
-  message(sprintf("✅ Successfully applied hotfix to package: %s", pkg))
+  message(sprintf("Successfully applied hotfix to package: %s", pkg))
   invisible(TRUE)
 }
