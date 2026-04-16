@@ -12,6 +12,7 @@
 .Renviron
 .Rbuildignore
 .gitattributes
+docs/
 
 # Package build and checks
 *.tar.gz

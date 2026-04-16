@@ -37,13 +37,19 @@ inject_patch <- function(pkg, patch_list, lock = TRUE) {
       stop(sprintf("Object '%s' not found in the target environment.", name), call. = FALSE)
     }
 
+    # Ensure the injected function inherits the package's internal namespace
     environment(replacement) <- ns
+    
+    
+    .hotpatchR_backup_store(pkg, name)
+
+    
     if (bindingIsLocked(name, ns)) {
       .hotpatchR_unlock_binding(name, ns)
     }
 
+    
     assign(name, replacement, envir = ns)
-    .hotpatchR_backup_store(pkg, name)
 
     if (lock) {
       .hotpatchR_lock_binding(name, ns)
@@ -52,6 +58,8 @@ inject_patch <- function(pkg, patch_list, lock = TRUE) {
 
   invisible(TRUE)
 }
+
+
 
 .hotpatchR_env <- new.env(parent = emptyenv())
 
@@ -74,6 +82,9 @@ inject_patch <- function(pkg, patch_list, lock = TRUE) {
 
   key <- paste(pkg_key, name, sep = "::")
   ns <- if (is.environment(pkg)) pkg else getNamespace(pkg)
+  
+  # Only back up if we haven't already backed it up this session 
+  # (prevents overwriting the true original with a previous patch)
   if (!exists(key, envir = .hotpatchR_env, inherits = FALSE)) {
     original <- get(name, envir = ns)
     assign(key, original, envir = .hotpatchR_env)
@@ -100,7 +111,9 @@ undo_patch <- function(pkg, names = NULL) {
   } else {
     paste0("^", pkg, "::")
   }
+  
   pkg_keys <- grep(prefix, keys, value = TRUE, fixed = is.environment(pkg))
+  
   if (length(pkg_keys) == 0L) {
     msg_target <- if (is.environment(pkg)) "environment" else sprintf("package '%s'", pkg)
     warning(sprintf("No patch backup found for %s.", msg_target), call. = FALSE)
@@ -115,11 +128,15 @@ undo_patch <- function(pkg, names = NULL) {
   for (key in pkg_keys) {
     original <- get(key, envir = .hotpatchR_env)
     name <- sub(prefix, "", key, fixed = is.environment(pkg))
+    
     if (bindingIsLocked(name, ns)) {
       .hotpatchR_unlock_binding(name, ns)
     }
+    
     assign(name, original, envir = ns)
     .hotpatchR_lock_binding(name, ns)
+    
+    # Remove the backup once restored
     rm(list = key, envir = .hotpatchR_env)
   }
 
@@ -146,7 +163,9 @@ test_patched_dir <- function(pkg, test_path = "tests/testthat", reporter = "summ
     stop(sprintf("Test path '%s' does not exist.", test_path), call. = FALSE)
   }
 
+  # Ensure the package is loaded into the search path/namespace registry before testing
   getNamespace(pkg)
+  
   testthat::test_dir(test_path, reporter = reporter)
 }
 
@@ -177,5 +196,7 @@ apply_hotfix_file <- function(file, pkg = NULL) {
 
   patch_list <- get("patch_list", envir = env)
   inject_patch(pkg = pkg, patch_list = patch_list)
+  
+  message(sprintf("✅ Successfully applied hotfix to package: %s", pkg))
   invisible(TRUE)
 }
