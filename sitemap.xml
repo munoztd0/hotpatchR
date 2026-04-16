@@ -8,6 +8,8 @@
 <url><loc>https://example.com/hotpatchR/index.html</loc></url>
 <url><loc>https://example.com/hotpatchR/news/index.html</loc></url>
 <url><loc>https://example.com/hotpatchR/reference/apply_hotfix_file.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/dummy_child_func.html</loc></url>
+<url><loc>https://example.com/hotpatchR/reference/dummy_parent_func.html</loc></url>
 <url><loc>https://example.com/hotpatchR/reference/index.html</loc></url>
 <url><loc>https://example.com/hotpatchR/reference/inject_patch.html</loc></url>
 <url><loc>https://example.com/hotpatchR/reference/test_patched_dir.html</loc></url>
