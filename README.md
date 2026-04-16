@@ -1,7 +1,7 @@
 # hotpatchR <a href='https://github.com/munoztd0/hotpatchR'><img src="inst/hex/hotpatchR-hex.png" align="right" width="200"/></a>
 
 <!-- start badges -->
-[[![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/pkgdown.yaml)
 [![Codecov test coverage](https://codecov.io/gh/munoztd0/hotpatchR/graph/badge.svg)](https://app.codecov.io/gh/munoztd0/hotpatchR)
 <!-- badges: end -->
