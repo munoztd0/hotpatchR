@@ -62,30 +62,46 @@ Benefits:
 - no need to copy parent callers or entire dependency chains
 - easier validation in live test workflows
 
+## Test-hotfix use case
+
+`hotpatchR` is built for the common legacy scenario where a package version is fixed in place
+and you want to validate a runtime correction using existing package tests.
+With `inject_patch()`, you can replace a broken internal function.
+
+A typical test-hotfix flow looks like this:
+
+```r
+library(hotpatchR)
+
+baseline <- hotpatchR:::dummy_parent_func("test")
+print(baseline)
+#> "Parent output -> I am the BROKEN child. Input: test"
+
+inject_patch(
+  pkg = "hotpatchR",
+  patch_list = list(dummy_child_func = function(x) {
+    paste("I am the FIXED child! Input:", x)
+  })
+)
+
+patched_result <- hotpatchR:::dummy_parent_func("test")
+print(patched_result)
+#> "Parent output -> I am the FIXED child! Input: test"
+
+
+#Eventually, you can reverse the patch to restore the original behavior if needed:
+undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
+restored_result <- hotpatchR:::dummy_parent_func("test")
+print(restored_result)
+#> "Parent output -> I am the BROKEN child. Input: test"
+```
+
 ## Core API
 
 - `inject_patch(pkg, patch_list)`: overwrite functions inside a package namespace or environment
 - `undo_patch(pkg, names = NULL)`: restore backed-up originals for patched bindings
 - `test_patched_dir(pkg, test_path)`: run `testthat` tests against the modified namespace
 - `apply_hotfix_file(file, pkg = NULL)`: load a hotfix script and inject the included patch list
-
-## Example usage
-
-```r
-library(hotpatchR)
-
-pkg_env <- new.env()
-pkg_env$broken_child <- function() "I am broken"
-pkg_env$parent_caller <- function() pkg_env$broken_child()
-lockEnvironment(pkg_env)
-lockBinding("broken_child", pkg_env)
-lockBinding("parent_caller", pkg_env)
-
-inject_patch(pkg_env, list(broken_child = function() "I am FIXED"))
-
-pkg_env$parent_caller()
-#> "I am FIXED"
-```
 
 ## How it works
 
@@ -95,5 +111,4 @@ normal internal function resolution.
 
 ## Vignettes and docs
 
-See `vignettes/hotpatchR-intro.Rmd` for a deeper explanation of the namespace trap,
-rollback workflows, and example hotfix scripts.
+See `vignettes/hotpatchR-intro.Rmd` for a deeper explanation of the namespace trap, rollback workflows, and example hotfix scripts.
