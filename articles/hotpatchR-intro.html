@@ -89,30 +89,28 @@ workflows.</p>
 <div class="section level3">
 <h3 id="the-legacy-package-lockdown-problem">The legacy package lockdown problem<a class="anchor" aria-label="anchor" href="#the-legacy-package-lockdown-problem"></a>
 </h3>
-<p>A loaded R package lives in a locked namespace. That means internal
-functions are resolved from inside the package bubble. When one internal
-function calls another, R does not look in the global environment.</p>
-<p>So if you fix <code>a_freq_j()</code> in the global environment,
-<code>tt_to_tlgrtf()</code> inside the package still calls the original
-broken version.</p>
-<p>This is the namespace trap that makes legacy hotfixing so
-difficult.</p>
+<p>A loaded R package lives in a locked namespace. Internal functions
+are resolved from inside the package bubble, so calling a hidden helper
+from the global environment does not change the package’s internal
+behavior.</p>
+<p>This is the namespace trap that makes legacy hotfixing difficult: a
+visible exported function may still invoke a broken internal helper even
+after you have sourced a fixed version elsewhere.</p>
 </div>
 <div class="section level3">
 <h3 id="why-the-global-workaround-fails">Why the global workaround fails<a class="anchor" aria-label="anchor" href="#why-the-global-workaround-fails"></a>
 </h3>
 <p>The usual workaround is:</p>
 <ul>
-<li>identify the broken function</li>
-<li>find all parent callers in the package</li>
-<li>copy the broken function and every dependent caller into a hotfix
-script</li>
+<li>identify the broken internal function</li>
+<li>find every package caller that depends on it</li>
+<li>copy the broken internals into a hotfix script</li>
 <li>source the script into the global environment</li>
-<li>run tests to confirm the patched path</li>
+<li>run tests and hope the package resolves the new bindings</li>
 </ul>
-<p>This is painful because a bug in one internal function can require
-copying many internal callers, even when only one implementation
-actually needs to change.</p>
+<p>That workflow is brittle because a bug in one hidden helper can force
+you to patch many callers, even when only one implementation needs to
+change.</p>
 </div>
 <div class="section level3">
 <h3 id="hotpatchr-philosophy">hotpatchR philosophy<a class="anchor" aria-label="anchor" href="#hotpatchr-philosophy"></a>
@@ -121,8 +119,8 @@ actually needs to change.</p>
 <code>hotpatchR</code> performs surgical edits inside the package
 namespace. That means:</p>
 <ul>
-<li>fix only the broken function</li>
-<li>internal callers automatically resolve to the updated
+<li>fix only the broken internal function</li>
+<li>exported callers automatically resolve to the updated
 implementation</li>
 <li>the package remains loaded and otherwise unchanged</li>
 </ul>
@@ -130,24 +128,34 @@ implementation</li>
 <div class="section level3">
 <h3 id="basic-workflow">Basic workflow<a class="anchor" aria-label="anchor" href="#basic-workflow"></a>
 </h3>
+<p>Before using the package, install it from CRAN or GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Simulate a locked package environment.</span></span>
-<span><span class="va">pkg_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">pkg_env</span><span class="op">$</span><span class="va">broken_child</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"I am broken"</span></span>
-<span><span class="va">pkg_env</span><span class="op">$</span><span class="va">parent_caller</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">pkg_env</span><span class="op">$</span><span class="fu">broken_child</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/bindenv.html" class="external-link">lockEnvironment</a></span><span class="op">(</span><span class="va">pkg_env</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/bindenv.html" class="external-link">lockBinding</a></span><span class="op">(</span><span class="st">"broken_child"</span>, <span class="va">pkg_env</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/bindenv.html" class="external-link">lockBinding</a></span><span class="op">(</span><span class="st">"parent_caller"</span>, <span class="va">pkg_env</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hotpatchR"</span><span class="op">)</span></span>
+<span><span class="co"># or, for the development version:</span></span>
+<span><span class="co"># remotes::install_github("munoztd0/hotpatchR")</span></span></code></pre></div>
+<p>The package includes a real example of this pattern with an exported
+parent function and an internal child helper.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">hotpatchR</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Apply the patch.</span></span>
-<span><span class="va">fixed_child</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="st">"I am FIXED"</span></span>
-<span><span class="fu"><a href="../reference/inject_patch.html">inject_patch</a></span><span class="op">(</span><span class="va">pkg_env</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>broken_child <span class="op">=</span> <span class="va">fixed_child</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
+<span><span class="co">#&gt; "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
 <span></span>
-<span><span class="va">pkg_env</span><span class="op">$</span><span class="fu">parent_caller</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "I am FIXED"</span></span></code></pre></div>
-<p>If <code>pkg_env</code> were a real package namespace, the same
-internal caller would now use the patched
-<code>broken_child()</code>.</p>
+<span><span class="fu"><a href="../reference/inject_patch.html">inject_patch</a></span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="st">"hotpatchR"</span>,</span>
+<span>  patch_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    dummy_child_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"I am the FIXED child! Input:"</span>, <span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">patched_result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">patched_result</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Parent output -&gt; I am the FIXED child! Input: test"</span></span>
+<span><span class="co">#&gt; "Parent output -&gt; I am the FIXED child! Input: test"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="how-inject_patch-works">How inject_patch works<a class="anchor" aria-label="anchor" href="#how-inject_patch-works"></a>
@@ -159,43 +167,45 @@ internal caller would now use the patched
 <li>assigns the replacement function into that environment</li>
 <li>re-locks the binding</li>
 </ol>
-<p>Because the replacement function’s parent environment is set to the
-target namespace, it can still call other internal objects from the same
-package.</p>
+<p>Because the replacement function can be defined with the package
+namespace as its parent, it still has access to the package’s internal
+helpers.</p>
 </div>
 <div class="section level3">
 <h3 id="rolling-back-a-patch">Rolling back a patch<a class="anchor" aria-label="anchor" href="#rolling-back-a-patch"></a>
 </h3>
 <p>If you need to restore the original binding,
 <code><a href="../reference/undo_patch.html">undo_patch()</a></code> reverses the previous change.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/undo_patch.html">undo_patch</a></span><span class="op">(</span><span class="va">pkg_env</span>, <span class="st">"broken_child"</span><span class="op">)</span></span>
-<span><span class="va">pkg_env</span><span class="op">$</span><span class="fu">parent_caller</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "I am broken"</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/undo_patch.html">undo_patch</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"hotpatchR"</span>, names <span class="op">=</span> <span class="st">"dummy_child_func"</span><span class="op">)</span></span>
+<span><span class="va">restored_result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">restored_result</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
+<span><span class="co">#&gt; "Parent output -&gt; I am the BROKEN child. Input: test"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="hotfix-scripts">Hotfix scripts<a class="anchor" aria-label="anchor" href="#hotfix-scripts"></a>
 </h3>
 <p><code><a href="../reference/apply_hotfix_file.html">apply_hotfix_file()</a></code> is a convenience wrapper for
-scripting hotfix application. A compatible hotfix script should
-define:</p>
+scripted hotfix application. A compatible hotfix file should define:</p>
 <ul>
 <li>
 <code>pkg</code> (optional, if not passed explicitly)</li>
 <li>
 <code>patch_list</code>, a named list of replacement functions</li>
 </ul>
-<p>Example hotfix file:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="st">"junco"</span></span>
+<p>Example hotfix file for this package:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#</span></span>
+<span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="st">"hotpatchR"</span></span>
 <span><span class="va">patch_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  a_freq_j <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="co"># fixed implementation</span></span>
+<span>  dummy_child_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"I am the FIXED child! Input:"</span>, <span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Then apply it with:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/apply_hotfix_file.html">apply_hotfix_file</a></span><span class="op">(</span><span class="st">"dev/junco_hotfix_v0-1-1.R"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/apply_hotfix_file.html">apply_hotfix_file</a></span><span class="op">(</span><span class="st">"dev/hotpatchR_hotfix.R"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
