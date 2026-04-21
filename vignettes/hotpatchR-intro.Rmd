@@ -59,7 +59,7 @@ The package includes a real example of this pattern with an exported parent func
 ```{r example}
 library(hotpatchR)
 
-baseline <- dummy_parent_func("test")
+baseline <- hotpatchR:::dummy_parent_func("test")
 print(baseline)
 #> "Parent output -> I am the BROKEN child. Input: test"
 
@@ -72,12 +72,11 @@ inject_patch(
   )
 )
 
-patched_result <- dummy_parent_func("test")
+patched_result <- hotpatchR:::dummy_parent_func("test")
 print(patched_result)
 #> "Parent output -> I am the FIXED child! Input: test"
 ```
 
-This shows the real package behavior: `dummy_parent_func()` is exported, while `dummy_child_func()` is a hidden internal helper that gets replaced inside the `hotpatchR` namespace.
 
 ## How inject_patch works
 
@@ -96,7 +95,7 @@ If you need to restore the original binding, `undo_patch()` reverses the previou
 
 ```{r undo-example}
 undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
-restored_result <- dummy_parent_func("test")
+restored_result <- hotpatchR:::dummy_parent_func("test")
 print(restored_result)
 #> "Parent output -> I am the BROKEN child. Input: test"
 ```
