@@ -2,10 +2,10 @@ Package: hotpatchR
 Type: Package
 Title: Runtime Namespace Patching Utilities for R Packages
 Version: 0.1.0
-Authors@R: person("David", "Munoz Tord", email = "david.munoz.tord@mailbox.org", role = c("aut", "cre"))
+Authors@R: person("David", "Munoz Tord", email = "david.munoztord@mailbox.org", role = c("aut", "cre"))
 Author: David Munoz Tord [aut, cre]
-Maintainer: David Munoz Tord <david.munoz.tord@mailbox.org>
-Description: Dynamically inject function patches into locked package namespaces and run tests against the patched in-memory package.
+Maintainer: David Munoz Tord <david.munoztord@mailbox.org>
+Description: Provides utilities for runtime hotpatching of locked R package namespaces. The package enables dynamic injection of function patches into sealed package environments without rebuilding or redeploying the package. This is particularly useful for legacy containerized workflows where package versions are frozen in place. The core functionality includes inject_patch() to inject patches into package namespaces, undo_patch() to restore original functions, apply_hotfix_file() to apply patches from external R scripts, and test_patched_dir() to run test suites against patched packages. The package implements namespace surgery techniques that allow internal callers to automatically see patched functions. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

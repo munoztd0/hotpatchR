@@ -17,3 +17,23 @@ Invisibly TRUE on success.
 \description{
 Undo a previously injected patch
 }
+\examples{
+# First inject a patch
+inject_patch(
+  pkg = "hotpatchR",
+  patch_list = list(dummy_child_func = function(x) {
+    paste("I am PATCHED! Input:", x)
+  })
+)
+
+# Call with patched function
+patched <- hotpatchR:::dummy_parent_func("test")
+print(patched)
+
+# Restore the original function
+undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
+
+# Now it's back to the original
+restored <- hotpatchR:::dummy_parent_func("test")
+print(restored)
+}

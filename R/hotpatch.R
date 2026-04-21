@@ -4,6 +4,22 @@
 #' @param patch_list A named list of functions to overwrite in the package namespace.
 #' @param lock Whether to re-lock bindings after patching.
 #' @return Invisibly TRUE on success.
+#' @examples
+#' # Show baseline behavior with broken function
+#' baseline <- hotpatchR:::dummy_parent_func("test")
+#' print(baseline)
+#'
+#' # Inject a patched version of the internal child function
+#' inject_patch(
+#'   pkg = "hotpatchR",
+#'   patch_list = list(dummy_child_func = function(x) {
+#'     paste("I am the FIXED child! Input:", x)
+#'   })
+#' )
+#'
+#' # Call the parent function again - it now uses the patched child
+#' patched_result <- hotpatchR:::dummy_parent_func("test")
+#' print(patched_result)
 #' @export
 inject_patch <- function(pkg, patch_list, lock = TRUE) {
   stopifnot(is.list(patch_list), length(patch_list) > 0)
@@ -96,6 +112,25 @@ inject_patch <- function(pkg, patch_list, lock = TRUE) {
 #' @param pkg Package name or environment.
 #' @param names Character vector of patched object names to restore. If NULL, restore all stored backups for pkg.
 #' @return Invisibly TRUE on success.
+#' @examples
+#' # First inject a patch
+#' inject_patch(
+#'   pkg = "hotpatchR",
+#'   patch_list = list(dummy_child_func = function(x) {
+#'     paste("I am PATCHED! Input:", x)
+#'   })
+#' )
+#'
+#' # Call with patched function
+#' patched <- hotpatchR:::dummy_parent_func("test")
+#' print(patched)
+#'
+#' # Restore the original function
+#' undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
+#'
+#' # Now it's back to the original
+#' restored <- hotpatchR:::dummy_parent_func("test")
+#' print(restored)
 #' @export
 undo_patch <- function(pkg, names = NULL) {
   ns <- if (is.environment(pkg)) {
@@ -149,6 +184,18 @@ undo_patch <- function(pkg, names = NULL) {
 #' @param test_path Path to tests to run.
 #' @param reporter testthat reporter name or object.
 #' @return Result object from testthat::test_dir.
+#' @examples
+#' # Inject a patch to the package
+#' inject_patch(
+#'   pkg = "hotpatchR",
+#'   patch_list = list(dummy_child_func = function(x) {
+#'     paste("PATCHED! Input:", x)
+#'   })
+#' )
+#'
+#' # Run tests against the patched package
+#' # (Note: this requires tests to exist in tests/testthat directory)
+#' # test_patched_dir(pkg = "hotpatchR")
 #' @export
 test_patched_dir <- function(pkg, test_path = "tests/testthat", reporter = "summary") {
   if (!requireNamespace("testthat", quietly = TRUE)) {
@@ -174,6 +221,29 @@ test_patched_dir <- function(pkg, test_path = "tests/testthat", reporter = "summ
 #' @param file Path to an R script that defines `patch_list` and optionally `pkg`.
 #' @param pkg Optional package name if not provided in the script.
 #' @return Invisibly TRUE on success.
+#' @examples
+#' # Create a temporary hotfix file
+#' hotfix_content <- "
+#' pkg <- 'hotpatchR'
+#' patch_list <- list(
+#'   dummy_child_func = function(x) {
+#'     paste('HOTFIXED! Input:', x)
+#'   }
+#' )
+#' "
+#'
+#' hotfix_file <- tempfile(fileext = ".R")
+#' writeLines(hotfix_content, hotfix_file)
+#'
+#' # Apply the hotfix from file
+#' apply_hotfix_file(file = hotfix_file, pkg = "hotpatchR")
+#'
+#' # Verify the patch works
+#' result <- hotpatchR:::dummy_parent_func("test")
+#' print(result)
+#'
+#' # Clean up
+#' unlink(hotfix_file)
 #' @export
 apply_hotfix_file <- function(file, pkg = NULL) {
   if (!file.exists(file)) {

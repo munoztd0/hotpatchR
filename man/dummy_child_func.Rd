@@ -15,4 +15,11 @@ A character string with child output
 \description{
 A dummy child function that we will "hotfix" in tests
 }
+\examples{
+# This function is internal and called by dummy_parent_func
+# It serves as an example of a function that can be hotpatched
+result <- hotpatchR:::dummy_child_func("example")
+print(result)
+
+}
 \keyword{internal}

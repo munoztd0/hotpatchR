@@ -19,3 +19,16 @@ Result object from testthat::test_dir.
 \description{
 Run testthat tests against a patched package namespace
 }
+\examples{
+# Inject a patch to the package
+inject_patch(
+  pkg = "hotpatchR",
+  patch_list = list(dummy_child_func = function(x) {
+    paste("PATCHED! Input:", x)
+  })
+)
+
+# Run tests against the patched package
+# (Note: this requires tests to exist in tests/testthat directory)
+# test_patched_dir(pkg = "hotpatchR")
+}

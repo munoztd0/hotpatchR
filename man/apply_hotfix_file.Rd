@@ -17,3 +17,27 @@ Invisibly TRUE on success.
 \description{
 Apply a hotfix file and inject the patch definitions
 }
+\examples{
+# Create a temporary hotfix file
+hotfix_content <- "
+pkg <- 'hotpatchR'
+patch_list <- list(
+  dummy_child_func = function(x) {
+    paste('HOTFIXED! Input:', x)
+  }
+)
+"
+
+hotfix_file <- tempfile(fileext = ".R")
+writeLines(hotfix_content, hotfix_file)
+
+# Apply the hotfix from file
+apply_hotfix_file(file = hotfix_file, pkg = "hotpatchR")
+
+# Verify the patch works
+result <- hotpatchR:::dummy_parent_func("test")
+print(result)
+
+# Clean up
+unlink(hotfix_file)
+}

@@ -19,3 +19,20 @@ Invisibly TRUE on success.
 \description{
 Inject a runtime patch into a locked package namespace
 }
+\examples{
+# Show baseline behavior with broken function
+baseline <- hotpatchR:::dummy_parent_func("test")
+print(baseline)
+
+# Inject a patched version of the internal child function
+inject_patch(
+  pkg = "hotpatchR",
+  patch_list = list(dummy_child_func = function(x) {
+    paste("I am the FIXED child! Input:", x)
+  })
+)
+
+# Call the parent function again - it now uses the patched child
+patched_result <- hotpatchR:::dummy_parent_func("test")
+print(patched_result)
+}
