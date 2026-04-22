@@ -72,11 +72,11 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This function is internal and called by dummy_parent_func</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This function is called by dummy_parent_func</span></span></span>
 <span class="r-in"><span><span class="co"># It serves as an example of a function that can be hotpatched</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu">dummy_child_func</span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">dummy_child_func</span><span class="op">(</span><span class="st">"example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HOTFIXED! Input: example"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "I am the BROKEN child. Input: example"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

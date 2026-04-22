@@ -81,11 +81,11 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Show baseline behavior with broken function</span></span></span>
-<span class="r-in"><span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="fu"><a href="dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Parent output -&gt; HOTFIXED! Input: test"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Inject a patched version of the internal child function</span></span></span>
+<span class="r-in"><span><span class="co"># Inject a patched version of the child function</span></span></span>
 <span class="r-in"><span><span class="fu">inject_patch</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  pkg <span class="op">=</span> <span class="st">"hotpatchR"</span>,</span></span>
 <span class="r-in"><span>  patch_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>dummy_child_func <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -94,7 +94,7 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Call the parent function again - it now uses the patched child</span></span></span>
-<span class="r-in"><span><span class="va">patched_result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">patched_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">patched_result</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Parent output -&gt; I am the FIXED child! Input: test"</span>
 </code></pre></div>

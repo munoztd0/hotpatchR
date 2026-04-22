@@ -138,7 +138,7 @@ parent function and an internal child helper.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">hotpatchR</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
 <span><span class="co">#&gt; "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
@@ -152,7 +152,7 @@ parent function and an internal child helper.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">patched_result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="va">patched_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">patched_result</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Parent output -&gt; I am the FIXED child! Input: test"</span></span>
 <span><span class="co">#&gt; "Parent output -&gt; I am the FIXED child! Input: test"</span></span></code></pre></div>
@@ -160,7 +160,7 @@ parent function and an internal child helper.</p>
 <div class="section level3">
 <h3 id="how-inject_patch-works">How inject_patch works<a class="anchor" aria-label="anchor" href="#how-inject_patch-works"></a>
 </h3>
-<p><code><a href="../reference/inject_patch.html">inject_patch()</a></code>:</p>
+<p><code><a href="../reference/inject_patch.html">inject_patch()</a></code></p>
 <ol style="list-style-type: decimal">
 <li>identifies the target namespace or environment</li>
 <li>unlocks the binding for the named object</li>
@@ -178,7 +178,7 @@ helpers.</p>
 <code><a href="../reference/undo_patch.html">undo_patch()</a></code> reverses the previous change.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/undo_patch.html">undo_patch</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"hotpatchR"</span>, names <span class="op">=</span> <span class="st">"dummy_child_func"</span><span class="op">)</span></span>
-<span><span class="va">restored_result</span> <span class="op">&lt;-</span> <span class="fu">hotpatchR</span><span class="fu">:::</span><span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
+<span><span class="va">restored_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dummy_parent_func.html">dummy_parent_func</a></span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">restored_result</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Parent output -&gt; I am the BROKEN child. Input: test"</span></span>
 <span><span class="co">#&gt; "Parent output -&gt; I am the BROKEN child. Input: test"</span></span></code></pre></div>
