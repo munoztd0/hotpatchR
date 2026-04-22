@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' # Call the parent function which internally calls dummy_child_func
-#' result <- hotpatchR:::dummy_parent_func("sample")
+#' result <- dummy_parent_func("sample")
 #' print(result)
 #'
 #' @export
@@ -25,12 +25,12 @@ dummy_parent_func <- function(x) {
 #' @return A character string with child output
 #'
 #' @examples
-#' # This function is internal and called by dummy_parent_func
+#' # This function is called by dummy_parent_func
 #' # It serves as an example of a function that can be hotpatched
-#' result <- hotpatchR:::dummy_child_func("example")
+#' result <- dummy_child_func("example")
 #' print(result)
 #'
-#' @keywords internal
+#' @export
 dummy_child_func <- function(x) {
   return(paste("I am the BROKEN child. Input:", x))
 }

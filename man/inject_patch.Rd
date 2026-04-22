@@ -21,10 +21,10 @@ Inject a runtime patch into a locked package namespace
 }
 \examples{
 # Show baseline behavior with broken function
-baseline <- hotpatchR:::dummy_parent_func("test")
+baseline <- dummy_parent_func("test")
 print(baseline)
 
-# Inject a patched version of the internal child function
+# Inject a patched version of the child function
 inject_patch(
   pkg = "hotpatchR",
   patch_list = list(dummy_child_func = function(x) {
@@ -33,6 +33,6 @@ inject_patch(
 )
 
 # Call the parent function again - it now uses the patched child
-patched_result <- hotpatchR:::dummy_parent_func("test")
+patched_result <- dummy_parent_func("test")
 print(patched_result)
 }

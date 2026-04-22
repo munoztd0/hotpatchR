@@ -6,10 +6,10 @@
 #' @return Invisibly TRUE on success.
 #' @examples
 #' # Show baseline behavior with broken function
-#' baseline <- hotpatchR:::dummy_parent_func("test")
+#' baseline <- dummy_parent_func("test")
 #' print(baseline)
 #'
-#' # Inject a patched version of the internal child function
+#' # Inject a patched version of the child function
 #' inject_patch(
 #'   pkg = "hotpatchR",
 #'   patch_list = list(dummy_child_func = function(x) {
@@ -18,7 +18,7 @@
 #' )
 #'
 #' # Call the parent function again - it now uses the patched child
-#' patched_result <- hotpatchR:::dummy_parent_func("test")
+#' patched_result <- dummy_parent_func("test")
 #' print(patched_result)
 #' @export
 inject_patch <- function(pkg, patch_list, lock = TRUE) {
@@ -122,14 +122,14 @@ inject_patch <- function(pkg, patch_list, lock = TRUE) {
 #' )
 #'
 #' # Call with patched function
-#' patched <- hotpatchR:::dummy_parent_func("test")
+#' patched <- dummy_parent_func("test")
 #' print(patched)
 #'
 #' # Restore the original function
 #' undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
 #'
 #' # Now it's back to the original
-#' restored <- hotpatchR:::dummy_parent_func("test")
+#' restored <- dummy_parent_func("test")
 #' print(restored)
 #' @export
 undo_patch <- function(pkg, names = NULL) {
@@ -185,17 +185,18 @@ undo_patch <- function(pkg, names = NULL) {
 #' @param reporter testthat reporter name or object.
 #' @return Result object from testthat::test_dir.
 #' @examples
-#' # Inject a patch to the package
-#' inject_patch(
-#'   pkg = "hotpatchR",
-#'   patch_list = list(dummy_child_func = function(x) {
-#'     paste("PATCHED! Input:", x)
-#'   })
-#' )
+#' \dontrun{
+#'   # Inject a patch to the package
+#'   inject_patch(
+#'     pkg = "hotpatchR",
+#'     patch_list = list(dummy_child_func = function(x) {
+#'       paste("PATCHED! Input:", x)
+#'     })
+#'   )
 #'
-#' # Run tests against the patched package
-#' # (Note: this requires tests to exist in tests/testthat directory)
-#' # test_patched_dir(pkg = "hotpatchR")
+#'   # Run tests against the patched package
+#'   test_patched_dir(pkg = "hotpatchR")
+#' }
 #' @export
 test_patched_dir <- function(pkg, test_path = "tests/testthat", reporter = "summary") {
   if (!requireNamespace("testthat", quietly = TRUE)) {
@@ -239,7 +240,7 @@ test_patched_dir <- function(pkg, test_path = "tests/testthat", reporter = "summ
 #' apply_hotfix_file(file = hotfix_file, pkg = "hotpatchR")
 #'
 #' # Verify the patch works
-#' result <- hotpatchR:::dummy_parent_func("test")
+#' result <- dummy_parent_func("test")
 #' print(result)
 #'
 #' # Clean up

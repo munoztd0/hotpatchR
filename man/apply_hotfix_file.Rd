@@ -35,7 +35,7 @@ writeLines(hotfix_content, hotfix_file)
 apply_hotfix_file(file = hotfix_file, pkg = "hotpatchR")
 
 # Verify the patch works
-result <- hotpatchR:::dummy_parent_func("test")
+result <- dummy_parent_func("test")
 print(result)
 
 # Clean up

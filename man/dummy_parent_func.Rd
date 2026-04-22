@@ -17,7 +17,7 @@ A dummy parent function to test namespace injection
 }
 \examples{
 # Call the parent function which internally calls dummy_child_func
-result <- hotpatchR:::dummy_parent_func("sample")
+result <- dummy_parent_func("sample")
 print(result)
 
 }

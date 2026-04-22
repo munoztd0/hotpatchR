@@ -27,13 +27,13 @@ inject_patch(
 )
 
 # Call with patched function
-patched <- hotpatchR:::dummy_parent_func("test")
+patched <- dummy_parent_func("test")
 print(patched)
 
 # Restore the original function
 undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
 
 # Now it's back to the original
-restored <- hotpatchR:::dummy_parent_func("test")
+restored <- dummy_parent_func("test")
 print(restored)
 }

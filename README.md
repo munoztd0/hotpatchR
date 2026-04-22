@@ -73,7 +73,7 @@ A typical test-hotfix flow looks like this:
 ```r
 library(hotpatchR)
 
-baseline <- hotpatchR:::dummy_parent_func("test")
+baseline <- dummy_parent_func("test")
 print(baseline)
 #> "Parent output -> I am the BROKEN child. Input: test"
 
@@ -84,14 +84,14 @@ inject_patch(
   })
 )
 
-patched_result <- hotpatchR:::dummy_parent_func("test")
+patched_result <- dummy_parent_func("test")
 print(patched_result)
 #> "Parent output -> I am the FIXED child! Input: test"
 
 
 #Eventually, you can reverse the patch to restore the original behavior if needed:
 undo_patch(pkg = "hotpatchR", names = "dummy_child_func")
-restored_result <- hotpatchR:::dummy_parent_func("test")
+restored_result <- dummy_parent_func("test")
 print(restored_result)
 #> "Parent output -> I am the BROKEN child. Input: test"
 ```
