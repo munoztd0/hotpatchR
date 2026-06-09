@@ -1,4 +1,4 @@
-# hotpatchR <a href='https://github.com/munoztd0/hotpatchR'><img src="inst/hex/logo.png" align="right" width="200"/></a>
+# hotpatchR <a href='https://github.com/munoztd0/hotpatchR'><img src="https://github.com/munoztd0/hotpatchR/blob/bf87eee0f0de336920a9ce4ef2bfa9edd87a5b4c/inst/hex/logo.png" align="right" width="200"/></a>
 
 <!-- start badges -->
 [![R-CMD-check](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/munoztd0/hotpatchR/actions/workflows/R-CMD-check.yaml)
